@@ -12,7 +12,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: '*'
+  origin: [
+    'http://localhost:3000', 
+    'https://ai-travel-planner-blush-three.vercel.app' // Your live frontend!
+  ],
+  credentials: true
 }));
 app.use(express.json());
 

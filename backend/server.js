@@ -14,8 +14,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     'http://localhost:3000', 
-    'https://ai-travel-planner-blush-three.vercel.app' // Your live frontend!
+    'https://ai-travel-planner-blush-three.vercel.app'
   ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
   credentials: true
 }));
 app.use(express.json());
@@ -41,7 +43,6 @@ const tripSchema = new mongoose.Schema({
 });
 const Trip = mongoose.model('Trip', tripSchema);
 
-// --- AUTH ROUTING ---
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -66,7 +67,6 @@ app.post('/api/auth/login', async (req, res) => {
   } catch (error) { res.status(500).json({ message: 'Server Error' }); }
 });
 
-// Helper parsing block designed for structured tagging
 function parseItineraryDays(text, totalDays) {
   const daysArray = [];
   const lines = text.split('\n');
@@ -136,7 +136,6 @@ Day 2
 
     const aiText = response.text;
 
-    // Isolate chunks cleanly via the section tags
     const budgetPart = aiText.match(/\[BUDGET\]([\s\S]*?)\[HOTELS\]/i)?.[1] || "";
     const hotelsPart = aiText.match(/\[HOTELS\]([\s\S]*?)\[ITINERARY\]/i)?.[1] || "";
     const itineraryPart = aiText.match(/\[ITINERARY\]([\s\S]*)$/i)?.[1] || aiText;
